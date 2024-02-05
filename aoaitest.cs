@@ -17,7 +17,7 @@ namespace aoaifunctest
 {
     public static class aoaitest
     {
-        private const string prompt = "Extract flight information from the Summary below as JSON: Include departure airport code as DepartureAirportCode, arrival airport code as ArrivalAirportCode and flight path as FlightPath    Format flight path as XXX-XXX";
+        private const string prompt = "Extract flight information from the Summary below as JSON: Include departure airport code as DepartureAirportCode, arrival airport code as ArrivalAirportCode and flight path as Path    Format flight path as XXX-XXX";
         private const string contentDelimiter = "###";
 
         [FunctionName("aoaitest")]
@@ -46,7 +46,7 @@ namespace aoaifunctest
                         recordId = val.recordId,
                         data = new ResponseEntities.Data
                         {
-                            FlightData = returnValue
+                            FlightData = "[" + returnValue + "]"
                             //FlightDepartureAirport = aoaiResponse.DepartureAirportCode,
                             //FlightArrivalAirport = aoaiResponse.ArrivalAirportCode,
                             //FlightPath = aoaiResponse.FlightPath
