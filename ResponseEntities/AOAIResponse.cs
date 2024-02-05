@@ -8,6 +8,6 @@ namespace aoaifunctest.ResponseEntities
     {
         public string DepartureAirportCode { get; set; }
         public string ArrivalAirportCode { get; set; }
-        public string FlightPath { get; set; }
+        public string Path { get; set; }
     }
 }

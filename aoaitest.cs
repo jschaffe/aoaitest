@@ -25,7 +25,7 @@ namespace aoaifunctest
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log)
         {
-            log.LogInformation("C# HTTP trigger function processed a request.");
+            log.LogInformation("AOAI Function Test is being executed...");
 
             var response = new SkillResponse();
 
@@ -46,9 +46,10 @@ namespace aoaifunctest
                         recordId = val.recordId,
                         data = new ResponseEntities.Data
                         {
-                            FlightDepartureAirport = aoaiResponse.DepartureAirportCode,
-                            FlightArrivalAirport = aoaiResponse.ArrivalAirportCode,
-                            FlightPath = aoaiResponse.FlightPath
+                            FlightData = returnValue
+                            //FlightDepartureAirport = aoaiResponse.DepartureAirportCode,
+                            //FlightArrivalAirport = aoaiResponse.ArrivalAirportCode,
+                            //FlightPath = aoaiResponse.FlightPath
                         }
                     });
                 }
