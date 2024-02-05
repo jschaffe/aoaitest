@@ -31,6 +31,7 @@ namespace aoaifunctest
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             //dynamic skillData = JsonConvert.DeserializeObject(requestBody);
+            log.LogInformation(requestBody);
 
             var skillData = JsonHelper.Deserialize<SkillData>(requestBody);
             OpenAIHelper openAI = new OpenAIHelper();
