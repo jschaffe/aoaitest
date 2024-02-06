@@ -17,7 +17,7 @@ namespace aoaifunctest
 {
     public static class aoaitest
     {
-        private const string prompt = "Extract flight information from the Summary below as JSON: Include departure airport code as DepartureAirportCode, arrival airport code as ArrivalAirportCode and flight path as Path    Format flight path as XXX-XXX";
+        private const string prompt = "Extract flight information from the Summary below as JSON: Include departure airport code as DepartureAirportCode, arrival airport code as ArrivalAirportCode, flight path as Path, Airline as Carrier, flight number as Number, departure airport as DepartureAirport, arrival airport as ArrivalAirport, seat number as Seat    Format flight path as XXX-XXX; Provide full departure airport name; Provide full arrival airport name; If seat number is not found return null";
         private const string contentDelimiter = "###";
 
         [FunctionName("aoaitest")]
