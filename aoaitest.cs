@@ -28,6 +28,7 @@ namespace aoaifunctest
             log.LogInformation("AOAI Function Test is being executed...");
 
             var response = new SkillResponse();
+            var returnValue = String.Empty;
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             //dynamic skillData = JsonConvert.DeserializeObject(requestBody);
@@ -39,7 +40,7 @@ namespace aoaifunctest
             {
                 try
                 {
-                    var returnValue = openAI.GetPromptResponse($"{prompt} {contentDelimiter} {val.data.DisplaySummary} {contentDelimiter}");
+                    returnValue = openAI.GetPromptResponse($"{prompt} {contentDelimiter} {val.data.DisplaySummary} {contentDelimiter}");
                     var aoaiResponse = JsonHelper.Deserialize<AOAIResponse>(returnValue);
                     response.values.Add(new aoaifunctest.ResponseEntities.Values
                     {
@@ -57,8 +58,11 @@ namespace aoaifunctest
                 {
                     var temp = new aoaifunctest.ResponseEntities.Values
                     {
-                        recordId = val.recordId
-
+                        recordId = val.recordId,
+                        data = new ResponseEntities.Data
+                        {
+                            FlightData = "[" + returnValue + "]"
+                        }
                     };
                     temp.errors.Add(ex.Message);
                     response.values.Add(temp);
