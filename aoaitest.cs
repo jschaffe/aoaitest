@@ -35,24 +35,39 @@ namespace aoaifunctest
             log.LogInformation(requestBody);
 
             var skillData = JsonHelper.Deserialize<SkillData>(requestBody);
-            OpenAIHelper openAI = new OpenAIHelper();
             foreach (var val in skillData.values)
             {
                 try
                 {
-                    returnValue = openAI.GetPromptResponse($"{prompt} {contentDelimiter} {val.data.DisplaySummary} {contentDelimiter}");
-                    var aoaiResponse = JsonHelper.Deserialize<AOAIResponse>(returnValue);
-                    response.values.Add(new aoaifunctest.ResponseEntities.Values
+                    if (val.data.SourceName.Equals("PARIS", StringComparison.InvariantCultureIgnoreCase))
                     {
-                        recordId = val.recordId,
-                        data = new ResponseEntities.Data
+                        OpenAIHelper openAI = new OpenAIHelper();
+                        //returnValue = openAI.GetPromptResponse($"{prompt} {contentDelimiter} {val.data.DisplaySummary} {contentDelimiter}");
+                        returnValue = openAI.GetChatPromptResponse($"{prompt} {contentDelimiter} {val.data.DisplaySummary} {contentDelimiter}");
+                        var aoaiResponse = JsonHelper.Deserialize<AOAIResponse>(returnValue);
+                        response.values.Add(new aoaifunctest.ResponseEntities.Values
                         {
-                            FlightData = "[" + returnValue + "]"
-                            //FlightDepartureAirport = aoaiResponse.DepartureAirportCode,
-                            //FlightArrivalAirport = aoaiResponse.ArrivalAirportCode,
-                            //FlightPath = aoaiResponse.FlightPath
-                        }
-                    });
+                            recordId = val.recordId,
+                            data = new ResponseEntities.Data
+                            {
+                                FlightData = "[" + returnValue + "]"
+                                //FlightDepartureAirport = aoaiResponse.DepartureAirportCode,
+                                //FlightArrivalAirport = aoaiResponse.ArrivalAirportCode,
+                                //FlightPath = aoaiResponse.FlightPath
+                            }
+                        });
+                    }
+                    else
+                    {
+                        response.values.Add(new aoaifunctest.ResponseEntities.Values
+                        {
+                            recordId = val.recordId,
+                            data = new ResponseEntities.Data
+                            {
+                                FlightData = val.data.Flight
+                            }
+                        });
+                    }
                 }
                 catch (Exception ex)
                 {

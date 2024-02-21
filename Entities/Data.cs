@@ -8,6 +8,7 @@ namespace aoaifunctest.Entities
     {
         public string DisplaySummary { get; set; }
         public string SourceName { get; set; }
+        public string Flight { get; set; }
 
     }
 }
