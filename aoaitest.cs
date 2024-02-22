@@ -31,7 +31,6 @@ namespace aoaifunctest
             var returnValue = String.Empty;
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            //dynamic skillData = JsonConvert.DeserializeObject(requestBody);
             log.LogInformation(requestBody);
 
             var skillData = JsonHelper.Deserialize<SkillData>(requestBody);
@@ -45,21 +44,18 @@ namespace aoaifunctest
                         //returnValue = openAI.GetPromptResponse($"{prompt} {contentDelimiter} {val.data.DisplaySummary} {contentDelimiter}");
                         returnValue = openAI.GetChatPromptResponse($"{prompt} {contentDelimiter} {val.data.DisplaySummary} {contentDelimiter}");
                         var aoaiResponse = JsonHelper.Deserialize<AOAIResponse>(returnValue);
-                        response.values.Add(new aoaifunctest.ResponseEntities.Values
+                        response.values.Add(new ResponseEntities.Values
                         {
                             recordId = val.recordId,
                             data = new ResponseEntities.Data
                             {
                                 FlightData = "[" + returnValue + "]"
-                                //FlightDepartureAirport = aoaiResponse.DepartureAirportCode,
-                                //FlightArrivalAirport = aoaiResponse.ArrivalAirportCode,
-                                //FlightPath = aoaiResponse.FlightPath
                             }
                         });
                     }
                     else
                     {
-                        response.values.Add(new aoaifunctest.ResponseEntities.Values
+                        response.values.Add(new ResponseEntities.Values
                         {
                             recordId = val.recordId,
                             data = new ResponseEntities.Data
@@ -71,7 +67,7 @@ namespace aoaifunctest
                 }
                 catch (Exception ex)
                 {
-                    var temp = new aoaifunctest.ResponseEntities.Values
+                    var temp = new ResponseEntities.Values
                     {
                         recordId = val.recordId,
                         data = new ResponseEntities.Data
