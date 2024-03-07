@@ -12,6 +12,7 @@ using aoaifunctest.Helpers;
 using aoaifunctest.ResponseEntities;
 using System.Net.Http;
 using System.Net;
+using Newtonsoft.Json.Linq;
 
 namespace aoaifunctest
 {
@@ -43,15 +44,29 @@ namespace aoaifunctest
                         OpenAIHelper openAI = new OpenAIHelper();
                         //returnValue = openAI.GetPromptResponse($"{prompt} {contentDelimiter} {val.data.DisplaySummary} {contentDelimiter}");
                         returnValue = openAI.GetChatPromptResponse($"{prompt} {contentDelimiter} {val.data.DisplaySummary} {contentDelimiter}");
-                        var aoaiResponse = JsonHelper.Deserialize<AOAIResponse>(returnValue);
-                        response.values.Add(new ResponseEntities.Values
+                        if (IsJson(returnValue))
                         {
-                            recordId = val.recordId,
-                            data = new ResponseEntities.Data
+                            var aoaiResponse = JsonHelper.Deserialize<AOAIResponse>(returnValue);
+                            response.values.Add(new ResponseEntities.Values
                             {
-                                FlightData = "[" + returnValue + "]"
-                            }
-                        });
+                                recordId = val.recordId,
+                                data = new ResponseEntities.Data
+                                {
+                                    FlightData = "[" + returnValue + "]"
+                                }
+                            });
+                        }
+                        else
+                        {
+                            response.values.Add(new ResponseEntities.Values
+                            {
+                                recordId = val.recordId,
+                                data = new ResponseEntities.Data
+                                {
+                                    FlightData = null
+                                }
+                            });
+                        }
                     }
                     else
                     {
@@ -83,6 +98,20 @@ namespace aoaifunctest
             var httpResponse = new HttpResponseMessage(HttpStatusCode.OK);
             httpResponse.Content = new StringContent(JsonHelper.Serializer<SkillResponse>(response), System.Text.Encoding.UTF8, "application/json");
             return httpResponse;
+        }
+
+        private static bool IsJson(string jsonValue)
+        {
+            try
+            {
+                var obj = JToken.Parse(jsonValue);
+                return true;
+            }
+            catch (JsonReaderException jex)
+            {
+                // Exception in parsing JSON
+                return false;
+            }
         }
     }
 }
