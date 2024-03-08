@@ -58,14 +58,16 @@ namespace aoaifunctest
                         }
                         else
                         {
-                            response.values.Add(new ResponseEntities.Values
+                            var temp = new ResponseEntities.Values
                             {
                                 recordId = val.recordId,
                                 data = new ResponseEntities.Data
                                 {
                                     FlightData = null
                                 }
-                            });
+                            };
+                            temp.warnings.Add(returnValue);
+                            response.values.Add(temp);
                         }
                     }
                     else
